@@ -2,6 +2,10 @@ from datetime import datetime
 from django.db import models
 
 
+class Category(models.Model):
+    name = models.CharField()
+
+
 class Product(models.Model):
     MATERIAL, EPHEMERAL = range(1, 3)
     TYPE_CHOICES = (
@@ -13,3 +17,4 @@ class Product(models.Model):
     price = models.FloatField()
     modified_at = models.DateTimeField('abc', default=datetime.now)
     ptype = models.SmallIntegerField(choices=TYPE_CHOICES)
+    category_id = models.ForeignKey(Category)

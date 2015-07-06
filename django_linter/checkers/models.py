@@ -21,6 +21,9 @@ class ModelsChecker(BaseChecker):
         'W5103': ('Possible use of naive datetime, consider using "auto_now"',
                   'naive-datetime-used',
                   'Used when there is datetime.now is used.'),
+        'W5104': ('Related field is named with _id suffix',
+                  'related-field-named-with-id',
+                  'Used when related field is named with _id suffix'),
     }
 
     _is_model_class = False
@@ -33,6 +36,9 @@ class ModelsChecker(BaseChecker):
     def visit_class(self, node):
         self._is_model_class = bool(
             node.is_subtype_of('django.db.models.base.Model'))
+
+        if self._is_model_class:
+            pass
 
     def leave_class(self, node):
         self._is_model_class = False
@@ -50,13 +56,17 @@ class ModelsChecker(BaseChecker):
                         if (isinstance(arg, Keyword) and
                                 arg.arg == 'null' and arg.value.value):
                             self.add_message(
-                                'W5101', args=field_name, node=node)
-                if self._is_money_field(field_name) and (
-                        val.name == 'FloatField'):
-                    self.add_message('W5102', args=field_name, node=node)
-                if val.name == 'DateTimeField':
+                                'W5101', args=field_name, node=arg.value)
+                elif val.name == 'DateTimeField':
                     for arg in node.args:
                         if (isinstance(arg, Keyword) and
                                 arg.arg == 'default' and
                                 'datetime.now' in arg.value.as_string()):
                             self.add_message('W5103', node=arg.value)
+                elif val.is_subtype_of(
+                        'django.db.models.fields.related.RelatedField'):
+                    if field_name.endswith('_id'):
+                        self.add_message('W5104', node=node)
+                if self._is_money_field(field_name) and (
+                        val.name == 'FloatField'):
+                    self.add_message('W5102', args=field_name, node=node)
