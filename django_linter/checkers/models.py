@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division,
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 from pylint.checkers.utils import safe_infer
-from astroid import AssName, Keyword
+from astroid import AssName, Keyword, Return, Getattr, Instance
 
 
 class ModelsChecker(BaseChecker):
@@ -17,7 +17,7 @@ class ModelsChecker(BaseChecker):
                   'Used when text field has null=True.'),
         'W5102': ('Money related field is float: %s',
                   'float-money-field',
-                  'Used when money related field uses FloatField'),
+                  'Used when money related field uses FloatField.'),
         'W5103': ('Possible use of naive datetime, consider using "auto_now"',
                   'naive-datetime-used',
                   'Used when there is datetime.now is used.'),
@@ -26,16 +26,31 @@ class ModelsChecker(BaseChecker):
                   'Used when related field is named with _id suffix'),
         'W5105': ('Unicode method is absent in model "%s"',
                   'unicode-method-absent',
-                  'Used when model has no unicode method'),
+                  'Used when model has no unicode method.'),
+        'W5106': ('Unicode method should always return unicode',
+                  'unicode-method-return',
+                  'Used when unicode method does not return unicode.'),
     }
 
     _is_model_class = False
     _has_unicode_method = False
-    _text_fields = {'CharField', 'TextField', 'SlugField'}
+    _text_fields = {'django.db.models.fields.CharField',
+                    'django.db.models.fields.TextField',
+                    'django.db.models.fields.SlugField'}
 
     @staticmethod
     def _is_money_field(field_name):
         return 'price' in field_name
+
+    @classmethod
+    def _is_text_field(cls, klass):
+        return any(klass.is_subtype_of(text_field)
+                   for text_field in cls._text_fields)
+
+    @classmethod
+    def _is_text_class(cls, klass):
+        return (klass.is_subtype_of('__builtin__.unicode')
+                or cls._is_text_field(klass))
 
     def visit_class(self, node):
         self._is_model_class = bool(
@@ -52,6 +67,19 @@ class ModelsChecker(BaseChecker):
         if self._is_model_class:
             if node.name == '__unicode__':
                 self._has_unicode_method = True
+                for stmt in node.body:
+                    if isinstance(stmt, Return):
+
+                        val = safe_infer(stmt.value)
+                        if (val and isinstance(val, Instance) and
+                                not self._is_text_class(val._proxied)):
+                            self.add_message('W5106', node=stmt)
+
+                        elif isinstance(stmt.value, Getattr):
+                            getattr_ = stmt.value
+                            if getattr_.expr.name == 'self':
+                                if getattr_.attrname == 'id':
+                                    self.add_message('W5106', node=stmt)
 
     def visit_callfunc(self, node):
         if self._is_model_class:
