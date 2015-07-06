@@ -24,9 +24,13 @@ class ModelsChecker(BaseChecker):
         'W5104': ('Related field is named with _id suffix',
                   'related-field-named-with-id',
                   'Used when related field is named with _id suffix'),
+        'W5105': ('Unicode method is absent in model "%s"',
+                  'unicode-method-absent',
+                  'Used when model has no unicode method'),
     }
 
     _is_model_class = False
+    _has_unicode_method = False
     _text_fields = {'CharField', 'TextField', 'SlugField'}
 
     @staticmethod
@@ -37,11 +41,17 @@ class ModelsChecker(BaseChecker):
         self._is_model_class = bool(
             node.is_subtype_of('django.db.models.base.Model'))
 
-        if self._is_model_class:
-            pass
-
     def leave_class(self, node):
+        if self._is_model_class and not self._has_unicode_method:
+            self.add_message('W5105', args=node.name, node=node)
+
         self._is_model_class = False
+        self._has_unicode_method = False
+
+    def visit_function(self, node):
+        if self._is_model_class:
+            if node.name == '__unicode__':
+                self._has_unicode_method = True
 
     def visit_callfunc(self, node):
         if self._is_model_class:
