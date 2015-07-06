@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division,
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 from pylint.checkers.utils import safe_infer
-from astroid import AssName
+from astroid import AssName, Keyword
 
 
 class ModelsChecker(BaseChecker):
@@ -18,10 +18,13 @@ class ModelsChecker(BaseChecker):
         'W5102': ('Money related field is float: %s',
                   'float-money-field',
                   'Used when money related field uses FloatField'),
+        'W5103': ('Possible use of naive datetime, consider using "auto_now"',
+                  'naive-datetime-used',
+                  'Used when there is datetime.now is used.'),
     }
 
     _is_model_class = False
-    _test_fields = {'CharField', 'TextField', 'SlugField'}
+    _text_fields = {'CharField', 'TextField', 'SlugField'}
 
     @staticmethod
     def _is_money_field(field_name):
@@ -42,11 +45,18 @@ class ModelsChecker(BaseChecker):
                 field_name = ass_name.name
             val = safe_infer(node)
             if val is not None:
-                if val.name in self._test_fields:
+                if val.name in self._text_fields:
                     for arg in node.args:
-                        if arg.arg == 'null' and arg.value.value:
+                        if (isinstance(arg, Keyword) and
+                                arg.arg == 'null' and arg.value.value):
                             self.add_message(
                                 'W5101', args=field_name, node=node)
                 if self._is_money_field(field_name) and (
                         val.name == 'FloatField'):
                     self.add_message('W5102', args=field_name, node=node)
+                if val.name == 'DateTimeField':
+                    for arg in node.args:
+                        if (isinstance(arg, Keyword) and
+                                arg.arg == 'default' and
+                                'datetime.now' in arg.value.as_string()):
+                            self.add_message('W5103', node=arg.value)
