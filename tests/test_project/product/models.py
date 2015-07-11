@@ -6,6 +6,7 @@ class Category(models.Model):
     name = models.CharField()
 
     def __unicode__(self):
+        print 'unicode called'
         return '{}'.format(self.id)
 
 
@@ -23,4 +24,5 @@ class Product(models.Model):
     category_id = models.ForeignKey(Category)
 
     def __unicode__(self):
+        print('unicode called')
         return self.price

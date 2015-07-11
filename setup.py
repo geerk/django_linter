@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='django_linter',
-    version='0.0.2',
+    version='0.0.3',
     packages=('django_linter', 'django_linter.checkers'),
     description='Linter for django projects',
     long_description=open('README.rst').read(),

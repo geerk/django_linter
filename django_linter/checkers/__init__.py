@@ -7,6 +7,8 @@ __all__ = ('register',)
 def register(linter):
     from .settings import SettingsShecker
     from .models import ModelsChecker
+    from .misc import MiscChecker
 
     linter.register_checker(SettingsShecker(linter))
     linter.register_checker(ModelsChecker(linter))
+    linter.register_checker(MiscChecker(linter))
