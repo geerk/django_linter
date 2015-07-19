@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django import forms
+from django.contrib import admin
 
 
 class Form1(forms.Form):
@@ -35,3 +36,9 @@ class Product(models.Model):
     def __unicode__(self):
         print('unicode called')
         return self.price
+
+
+class ProductAdmin(admin.ModelAdmin):
+    pass
+
+admin.register(ProductAdmin, Product)
