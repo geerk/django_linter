@@ -1,5 +1,14 @@
 from datetime import datetime
 from django.db import models
+from django import forms
+
+
+class Form1(forms.Form):
+    pass
+
+
+class Form2(forms.ModelForm):
+    pass
 
 
 class Category(models.Model):

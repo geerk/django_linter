@@ -8,7 +8,9 @@ def register(linter):
     from .settings import SettingsShecker
     from .models import ModelsChecker
     from .misc import MiscChecker
+    from .layout import LayoutChecker
 
     linter.register_checker(SettingsShecker(linter))
     linter.register_checker(ModelsChecker(linter))
     linter.register_checker(MiscChecker(linter))
+    linter.register_checker(LayoutChecker(linter))
