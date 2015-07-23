@@ -1,3 +1,5 @@
 *.py[co]
 *.sublime-project
 *.sublime-workspace
+dist
+*.egg-info

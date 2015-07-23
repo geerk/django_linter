@@ -7,6 +7,24 @@ Contributions are welcome.
 
 Only Python 2.7 supported for now.
 
+Installation
+------------
+
+    pip install django_linter
+
+Usage
+-----
+
+    usage: django-linter [-h] TARGET [TARGET ...]
+
+    Simple extension for pylint to check django projects for common mistakes.
+
+    positional arguments:
+      TARGET      python package or module
+
+    optional arguments:
+      -h, --help  show this help message and exit
+
 Implemented checks
 ------------------
 
