@@ -5,4 +5,4 @@ from django import Form
 
 
 class Form0(Form):
-    pass
+    print()
