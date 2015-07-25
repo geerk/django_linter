@@ -3,6 +3,8 @@ from django.db import models
 from django import forms
 from django.contrib import admin
 
+from test_project import settings
+
 
 class Form1(forms.Form):
     pass

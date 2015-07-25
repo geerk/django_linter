@@ -17,6 +17,9 @@ class SettingsShecker(BaseChecker):
         'E5002': ('Empty setting "%s"',
                   'empty-setting',
                   'Used when setting is empty value.'),
+        'W5001': ('Improper settings import',
+                  'improper-settings-import',
+                  'Used when settings is not imported from django.conf'),
     }
 
     _REQUIRED_SETTINGS = ('STATIC_ROOT', 'ALLOWED_HOSTS')
@@ -26,6 +29,17 @@ class SettingsShecker(BaseChecker):
         if node.name.rsplit('.', 1)[-1] == 'settings':
             return True
         return False
+
+    def visit_import(self, node):
+        if ('settings' in node.as_string() and
+                'django.conf' not in node.as_string()):
+            self.add_message('W5001', node=node)
+
+    def visit_from(self, node):
+        if node.modname.rsplit('.', 1)[-1] == 'settings' or (
+                'settings' in dict(node.names) and
+                'django.conf' not in node.modname):
+            self.add_message('W5001', node=node)
 
     def leave_module(self, node):
         if self._is_settings_module(node):

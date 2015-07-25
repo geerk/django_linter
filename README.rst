@@ -32,6 +32,7 @@ Implemented checks
 
 - E5001 (required-setting-missed): Used when required setting missed in settings file.
 - E5002 (empty-setting): Used when setting is empty value.
+- W5001 (improper-settings-import): Used when settings is not imported from django.conf
 
 **Models:**
 

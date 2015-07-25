@@ -3,6 +3,7 @@ from __future__ import (absolute_import, division,
 from django.shortcuts import render
 from django.http import HttpResponseForbidden
 
+import test_project.settings
 from .models import Product
 
 
