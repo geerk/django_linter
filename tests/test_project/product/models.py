@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import models
 from django import forms
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 
 from test_project import settings
 
@@ -21,6 +22,9 @@ class Category(models.Model):
         print 'unicode called'
         return '{}'.format(self.id)
 
+    def get_absolute_url(self):
+        return reverse('product_detail', args=(self.id,))
+
 
 class Product(models.Model):
     MATERIAL, EPHEMERAL = range(1, 3)
@@ -39,6 +43,9 @@ class Product(models.Model):
     def __unicode__(self):
         print('unicode called')
         return self.price
+
+    def get_absolute_url(self):
+        return '/products/%s' % self.id
 
 
 class ProductAdmin(admin.ModelAdmin):

@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division,
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 from pylint.checkers.utils import safe_infer
-from astroid import AssName, Keyword, Return, Getattr, Instance
+from astroid import AssName, Keyword, Return, Getattr, Instance, Name
 
 
 class ModelsChecker(BaseChecker):
@@ -33,11 +33,17 @@ class ModelsChecker(BaseChecker):
         'W5107': ('Model field redefinition: %s.%s',
                   'model-field-redefinition',
                   'Used when there are more than one model field with '
-                  'the same name.')
+                  'the same name.'),
+        'W5108': ('get_absolute_url defined without using reverse (%s)',
+                  'get-absolute-url-without-reverse',
+                  'Used when get_absolute_url method is defined without using '
+                  'reverse function.'),
     }
 
     _is_model_class = False
     _has_unicode_method = False
+    _is_get_absolute_url = False
+    _is_reverse_used_in_get_absolute_url = False
     _text_fields = {'django.db.models.fields.CharField',
                     'django.db.models.fields.TextField',
                     'django.db.models.fields.SlugField'}
@@ -87,8 +93,21 @@ class ModelsChecker(BaseChecker):
                             if getattr_.expr.name == 'self':
                                 if getattr_.attrname == 'id':
                                     self.add_message('W5106', node=stmt)
+            elif node.name == 'get_absolute_url':
+                self._is_get_absolute_url = True
+
+    def leave_function(self, node):
+        if (self._is_get_absolute_url and
+                not self._is_reverse_used_in_get_absolute_url):
+            self.add_message('W5108', node=node, args=(self._model_name,))
+        self._is_reverse_used_in_get_absolute_url = False
+        self._is_get_absolute_url = False
 
     def visit_callfunc(self, node):
+        if (self._is_get_absolute_url and isinstance(node.func, Name) and
+                node.func.name == 'reverse'):
+            self._is_reverse_used_in_get_absolute_url = True
+
         if self._is_model_class:
             ass_name = node.parent.get_children().next()
             field_name = 'undefined'

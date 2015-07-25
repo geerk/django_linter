@@ -43,6 +43,7 @@ Implemented checks
 - W5105 (unicode-method-absent): Used when model has no unicode method.
 - W5106 (unicode-method-return): Used when unicode method does not return unicode.
 - W5107 (model-field-redefinition): Used when there are more than one model field with the same name.
+- W5108 (get-absolute-url-without-reverse): Used when get_absolute_url method is defined without using reverse function.
 
 **Forms:**
 
