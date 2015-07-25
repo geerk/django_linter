@@ -30,6 +30,10 @@ class ModelsChecker(BaseChecker):
         'W5106': ('Unicode method should always return unicode',
                   'unicode-method-return',
                   'Used when unicode method does not return unicode.'),
+        'W5107': ('Model field redefinition: %s.%s',
+                  'model-field-redefinition',
+                  'Used when there are more than one model field with '
+                  'the same name.')
     }
 
     _is_model_class = False
@@ -55,6 +59,8 @@ class ModelsChecker(BaseChecker):
     def visit_class(self, node):
         self._is_model_class = bool(
             node.is_subtype_of('django.db.models.base.Model'))
+        self._model_field_names = set()
+        self._model_name = node.name
 
     def leave_class(self, node):
         if self._is_model_class and not self._has_unicode_method:
@@ -89,22 +95,30 @@ class ModelsChecker(BaseChecker):
                 field_name = ass_name.name
             val = safe_infer(node)
             if val is not None:
-                if val.name in self._text_fields:
-                    for arg in node.args:
-                        if (isinstance(arg, Keyword) and
-                                arg.arg == 'null' and arg.value.value):
-                            self.add_message(
-                                'W5101', args=field_name, node=arg.value)
-                elif val.name == 'DateTimeField':
-                    for arg in node.args:
-                        if (isinstance(arg, Keyword) and
-                                arg.arg == 'default' and
-                                'datetime.now' in arg.value.as_string()):
-                            self.add_message('W5103', node=arg.value)
-                elif val.is_subtype_of(
-                        'django.db.models.fields.related.RelatedField'):
-                    if field_name.endswith('_id'):
-                        self.add_message('W5104', node=node)
-                if self._is_money_field(field_name) and (
-                        val.name == 'FloatField'):
-                    self.add_message('W5102', args=field_name, node=node)
+                if val.is_subtype_of('django.db.models.fields.Field'):
+                    if field_name in self._model_field_names:
+                        self.add_message(
+                            'W5107', node=node,
+                            args=(self._model_name, field_name))
+                    else:
+                        self._model_field_names.add(field_name)
+
+                    if val.name in self._text_fields:
+                        for arg in node.args:
+                            if (isinstance(arg, Keyword) and
+                                    arg.arg == 'null' and arg.value.value):
+                                self.add_message(
+                                    'W5101', args=field_name, node=arg.value)
+                    elif val.name == 'DateTimeField':
+                        for arg in node.args:
+                            if (isinstance(arg, Keyword) and
+                                    arg.arg == 'default' and
+                                    'datetime.now' in arg.value.as_string()):
+                                self.add_message('W5103', node=arg.value)
+                    elif val.is_subtype_of(
+                            'django.db.models.fields.related.RelatedField'):
+                        if field_name.endswith('_id'):
+                            self.add_message('W5104', node=node)
+                    if self._is_money_field(field_name) and (
+                            val.name == 'FloatField'):
+                        self.add_message('W5102', args=field_name, node=node)

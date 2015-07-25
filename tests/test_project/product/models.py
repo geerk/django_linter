@@ -26,11 +26,12 @@ class Product(models.Model):
         (MATERIAL, 'Material'),
         (EPHEMERAL, 'Ephemeral'))
 
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     price = models.FloatField()
     modified_at = models.DateTimeField('abc', default=datetime.now)
     ptype = models.SmallIntegerField(choices=TYPE_CHOICES)
+    name = models.CharField(max_length=25)
     category_id = models.ForeignKey(Category)
 
     def __unicode__(self):
