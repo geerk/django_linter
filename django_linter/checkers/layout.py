@@ -15,7 +15,7 @@ class LayoutChecker(BaseChecker):
                   'Used when form class definition is not in forms module.'),
         'W5302': ('Admin class %s not in admin module',
                   'admin-layout',
-                  'Used when admin class definition is not in adin module.'),
+                  'Used when admin class definition is not in admin module.'),
     }
 
     def leave_class(self, node):

@@ -43,10 +43,14 @@ Implemented checks
 - W5106 (unicode-method-return): Used when unicode method does not return unicode.
 - W5107 (model-field-redefinition): Used when there are more than one model field with the same name.
 
+**Forms:**
+
+- W5401 (form-field-redefinition): Used when there are more than one form field with the same name.
+
 **Layout:**
 
 - W5301 (forms-layout): Used when form class definition is not in forms module.
-- W5302 (admin-layout): Used when admin class definition is not in adin module.
+- W5302 (admin-layout): Used when admin class definition is not in admin module.
 
 **Misc:**
 

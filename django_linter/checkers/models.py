@@ -59,8 +59,9 @@ class ModelsChecker(BaseChecker):
     def visit_class(self, node):
         self._is_model_class = bool(
             node.is_subtype_of('django.db.models.base.Model'))
-        self._model_field_names = set()
-        self._model_name = node.name
+        if self._is_model_class:
+            self._model_field_names = set()
+            self._model_name = node.name
 
     def leave_class(self, node):
         if self._is_model_class and not self._has_unicode_method:
