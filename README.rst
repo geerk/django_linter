@@ -47,6 +47,10 @@ Implemented checks
 
 - W5401 (form-field-redefinition): Used when there are more than one form field with the same name.
 
+**Views:**
+
+- W5501 (is-authenticated-not-called): Used when is_authenticated method is not called
+
 **Layout:**
 
 - W5301 (forms-layout): Used when form class definition is not in forms module.
