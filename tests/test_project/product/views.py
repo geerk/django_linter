@@ -1,13 +1,14 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 from django.shortcuts import render
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseNotFound
+from django.core.exceptions import MultipleObjectsReturned
 
 import test_project.settings
-from .models import Product
+from .models import Product, Category
 
 
-def list_view(request):
+def product_list_view(request):
     if request.is_authenticated():
         ctx = {'products': Product.objects.all()}
         return render('product_list.html', context=ctx)
@@ -15,9 +16,20 @@ def list_view(request):
         return HttpResponseForbidden()
 
 
-def detail_view(request, slug):
+def product_detail_view(request, slug):
     if request.is_authenticated:
-        p = Product.objects.get(slug=slug)
+        try:
+            p = Product.objects.get(slug=slug)
+        except MultipleObjectsReturned:
+            return HttpResponseNotFound()
         return render('product_detail.html', context={'product': p})
     else:
         return HttpResponseForbidden()
+
+
+def category_detail_view(request, pk):
+    try:
+        p = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return HttpResponseNotFound()
+    return render('product_detail.html', context={'product': p})

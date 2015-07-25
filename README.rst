@@ -52,6 +52,7 @@ Implemented checks
 **Views:**
 
 - W5501 (is-authenticated-not-called): Used when is_authenticated method is not called
+- W5502 (objects-get-without-doesnotexist): Used when Model.objects.get is used without enclosing it in try-except block to catch DoesNotExist exception.
 
 **Layout:**
 

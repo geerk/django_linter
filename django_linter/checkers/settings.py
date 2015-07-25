@@ -9,6 +9,7 @@ from astroid import List
 
 class SettingsShecker(BaseChecker):
     __implements__ = IAstroidChecker
+
     name = 'settings'
     msgs = {
         'E5001': ('Required setting "%s" is missed',

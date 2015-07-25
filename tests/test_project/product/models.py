@@ -3,12 +3,19 @@ from django.db import models
 from django import forms
 from django.contrib import admin
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from test_project import settings
 
 
 class Form1(forms.Form):
-    pass
+
+    def __init__(self, *args, **kwargs):
+        super(Form1, self).__init__(*args, **kwargs)
+        try:
+            p = Product.objects.get(id=1)
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            pass
 
 
 class Form2(forms.ModelForm):
