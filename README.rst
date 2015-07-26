@@ -1,7 +1,7 @@
 Django linter
 =============
 
-This is a simple extension for pylint that is aim to check some common mistakes in django projects.
+This is a simple extension for pylint that aims to check some common mistakes in django projects.
 
 Contributions are welcome.
 
