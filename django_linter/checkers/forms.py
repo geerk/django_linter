@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division,
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 from pylint.checkers.utils import safe_infer
-from astroid import AssName
+from astroid import YES, AssName
 
 
 class FormsChecker(BaseChecker):
@@ -33,15 +33,14 @@ class FormsChecker(BaseChecker):
     def visit_callfunc(self, node):
         if self._is_form_class:
             ass_name = node.parent.get_children().next()
-            field_name = 'undefined'
             if isinstance(ass_name, AssName):
                 field_name = ass_name.name
-            val = safe_infer(node)
-            if val is not None:
-                if val.is_subtype_of('django.forms.fields.Field'):
-                    if field_name in self._form_field_names:
-                        self.add_message(
-                            'W5401', node=node,
-                            args=(self._form_name, field_name))
-                    else:
-                        self._form_field_names.add(field_name)
+                val = safe_infer(node)
+                if val is not None and val is not YES:
+                    if val.is_subtype_of('django.forms.fields.Field'):
+                        if field_name in self._form_field_names:
+                            self.add_message(
+                                'W5401', node=node,
+                                args=(self._form_name, field_name))
+                        else:
+                            self._form_field_names.add(field_name)

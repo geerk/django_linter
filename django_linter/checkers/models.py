@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division,
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 from pylint.checkers.utils import safe_infer
-from astroid import AssName, Keyword, Return, Getattr, Instance, Name
+from astroid import YES, AssName, Keyword, Return, Getattr, Instance, Name
 
 
 class ModelsChecker(BaseChecker):
@@ -110,35 +110,35 @@ class ModelsChecker(BaseChecker):
 
         if self._is_model_class:
             ass_name = node.parent.get_children().next()
-            field_name = 'undefined'
             if isinstance(ass_name, AssName):
                 field_name = ass_name.name
-            val = safe_infer(node)
-            if val is not None:
-                if val.is_subtype_of('django.db.models.fields.Field'):
-                    if field_name in self._model_field_names:
-                        self.add_message(
-                            'W5107', node=node,
-                            args=(self._model_name, field_name))
-                    else:
-                        self._model_field_names.add(field_name)
+                val = safe_infer(node)
+                if val is not None and val is not YES:
+                    if val.is_subtype_of('django.db.models.fields.Field'):
+                        if field_name in self._model_field_names:
+                            self.add_message(
+                                'W5107', node=node,
+                                args=(self._model_name, field_name))
+                        else:
+                            self._model_field_names.add(field_name)
 
-                    if val.name in self._text_fields:
-                        for arg in node.args:
-                            if (isinstance(arg, Keyword) and
-                                    arg.arg == 'null' and arg.value.value):
-                                self.add_message(
-                                    'W5101', args=field_name, node=arg.value)
-                    elif val.name == 'DateTimeField':
-                        for arg in node.args:
-                            if (isinstance(arg, Keyword) and
+                        if val.name in self._text_fields:
+                            for arg in node.args:
+                                if (isinstance(arg, Keyword) and
+                                        arg.arg == 'null' and arg.value.value):
+                                    self.add_message('W5101', args=field_name,
+                                                     node=arg.value)
+                        elif val.name == 'DateTimeField':
+                            for arg in node.args:
+                                if (isinstance(arg, Keyword) and
                                     arg.arg == 'default' and
-                                    'datetime.now' in arg.value.as_string()):
-                                self.add_message('W5103', node=arg.value)
-                    elif val.is_subtype_of(
-                            'django.db.models.fields.related.RelatedField'):
-                        if field_name.endswith('_id'):
-                            self.add_message('W5104', node=node)
-                    if self._is_money_field(field_name) and (
-                            val.name == 'FloatField'):
-                        self.add_message('W5102', args=field_name, node=node)
+                                        'datetime.now' in arg.value.as_string()):
+                                    self.add_message('W5103', node=arg.value)
+                        elif val.is_subtype_of(
+                                'django.db.models.fields.related.RelatedField'):
+                            if field_name.endswith('_id'):
+                                self.add_message('W5104', node=node)
+                        if self._is_money_field(field_name) and (
+                                val.name == 'FloatField'):
+                            self.add_message(
+                                'W5102', args=field_name, node=node)

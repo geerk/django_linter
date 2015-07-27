@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division,
 from pylint.checkers import BaseChecker
 from pylint.checkers.utils import safe_infer
 from pylint.interfaces import IAstroidChecker
-from astroid import List
+from astroid import YES, List
 
 
 class SettingsShecker(BaseChecker):
@@ -49,12 +49,12 @@ class SettingsShecker(BaseChecker):
                 if setting_name not in module_locals:
                     self.add_message('E5001', args=setting_name, node=node)
                 else:
-                    value = safe_infer(module_locals[setting_name][-1])
-                    if value:
-                        if isinstance(value, List):
-                            is_empty = not value.elts
+                    val = safe_infer(module_locals[setting_name][-1])
+                    if val is not None and val is not YES:
+                        if isinstance(val, List):
+                            is_empty = not val.elts
                         else:
-                            is_empty = not value.value
+                            is_empty = not val.value
                         if is_empty:
                             self.add_message(
                                 'E5002', args=setting_name, node=node)

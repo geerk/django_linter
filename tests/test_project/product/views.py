@@ -3,6 +3,7 @@ from __future__ import (absolute_import, division,
 from django.shortcuts import render
 from django.http import HttpResponseForbidden, HttpResponseNotFound
 from django.core.exceptions import MultipleObjectsReturned
+from django.views.generic import TemplateView
 
 import test_project.settings
 from .models import Product, Category
@@ -34,3 +35,11 @@ def category_detail_view(request, pk):
     except Category.DoesNotExist:
         return HttpResponseNotFound()
     return render('product_detail.html', context={'product': p})
+
+
+class IndexView(TemplateView):
+
+    def get_context_data(self, **kwargs):
+        ctx = super(IndexView, self).get_context_data(**kwargs)
+        ctx['cat'] = Category.objects.get(pk=1)
+        return ctx

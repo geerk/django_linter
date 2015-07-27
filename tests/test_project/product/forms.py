@@ -15,3 +15,9 @@ class Form0(forms.Form):
     def __init__(self, *args, **kwargs):
         super(Form0, self).__init__(*args, **kwargs)
         p = Product.objects.get(id=1)
+
+    def clean_age(self):
+        age = self.cleaned_data['age']
+        if age < 18:
+            raise forms.ValidationError(
+                'Your are not allowed to use this site.')

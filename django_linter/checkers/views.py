@@ -25,6 +25,7 @@ class ViewsChecker(BaseChecker):
     }
 
     _is_view_function = False
+    _is_view_class = False
     _is_inside_try_except = False
     _try_except_node = None
     _is_len = True
@@ -45,30 +46,33 @@ class ViewsChecker(BaseChecker):
             self.add_message('W5501', node=node)
         elif node.attrname == 'objects':
             if parent.attrname == 'get':
-                if not self._is_inside_try_except:
-                    self.add_message('W5502', node=node)
-                else:
-                    for h in self._try_except_node.handlers:
-                        if self._is_does_not_exist(h.type):
-                            break
-                        elif isinstance(h.type, Tuple):
-                            _does_not_exist_found = False
-                            for exc_cls in h.type.elts:
-                                if self._is_does_not_exist(exc_cls):
-                                    _does_not_exist_found = True
-                                    break
-                            if _does_not_exist_found:
-                                break
-                    else:
+                if self._is_view_function or self._is_view_class:
+                    if not self._is_inside_try_except:
                         self.add_message('W5502', node=node)
+                    else:
+                        for h in self._try_except_node.handlers:
+                            if self._is_does_not_exist(h.type):
+                                break
+                            elif isinstance(h.type, Tuple):
+                                _does_not_exist_found = False
+                                for exc_cls in h.type.elts:
+                                    if self._is_does_not_exist(exc_cls):
+                                        _does_not_exist_found = True
+                                        break
+                                if _does_not_exist_found:
+                                    break
+                        else:
+                            self.add_message('W5502', node=node)
             elif parent.attrname in ('all', 'filter', 'exclude'):
                 if self._is_len:
                     self.add_message('W5503', node=node)
 
     def visit_function(self, node):
-        args = node.args.args
-        if args and isinstance(args[0], AssName) and args[0].name == 'request':
-            self._is_view_function = True
+        if 'views' in node.root().file:
+            args = node.args.args
+            if (args and isinstance(args[0], AssName) and
+                    args[0].name == 'request'):
+                self._is_view_function = True
 
     def leave_function(self, node):
         self._is_view_function = False
@@ -87,3 +91,10 @@ class ViewsChecker(BaseChecker):
 
     def leave_callfunc(self, node):
         self._is_len = False
+
+    def visit_class(self, node):
+        if node.is_subtype_of('django.views.generic.base.View'):
+            self._is_view_class = True
+
+    def leave_class(self, node):
+        self._is_view_class = False
