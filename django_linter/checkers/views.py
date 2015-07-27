@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division,
 
 from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
-from astroid import Name, CallFunc, AssName, Getattr, Tuple
+from astroid import Name, CallFunc, AssName, Getattr, Tuple, Subscript
 
 
 class ViewsChecker(BaseChecker):
@@ -22,6 +22,10 @@ class ViewsChecker(BaseChecker):
                   'fetching-db-objects-len',
                   'Used when there is db query that fetches objects from '
                   'database only to check the number of returned objects.'),
+        'W5504': ('Accessing raw GET or POST data, consider using forms',
+                  'raw-get-post-access',
+                  'Used when request.GET or request.POST dicts is accessed '
+                  'directly, it is better to use forms.'),
     }
 
     _is_view_function = False
@@ -37,13 +41,25 @@ class ViewsChecker(BaseChecker):
             return True
         return False
 
+    @staticmethod
+    def _is_request(node):
+        if ((isinstance(node, Name) and node.name == 'request') or
+                (isinstance(node, Getattr) and node.attrname == 'request')):
+            return True
+        return False
+
     def visit_getattr(self, node):
         parent = node.parent
         expr = node.expr
-        if (isinstance(expr, Name) and expr.name == 'request' and
-                node.attrname == 'is_authenticated' and
-                not isinstance(parent, CallFunc)):
-            self.add_message('W5501', node=node)
+        if self._is_request(expr):
+            if (node.attrname == 'is_authenticated' and
+                    not isinstance(parent, CallFunc)):
+                self.add_message('W5501', node=node)
+            elif node.attrname in ('GET', 'POST'):
+                if (isinstance(parent, Subscript) or
+                        isinstance(parent, Getattr) and
+                        parent.attrname == 'get'):
+                    self.add_message('W5504', node=node)
         elif node.attrname == 'objects':
             if parent.attrname == 'get':
                 if self._is_view_function or self._is_view_class:

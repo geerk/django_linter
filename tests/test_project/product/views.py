@@ -12,7 +12,8 @@ from .models import Product, Category
 def product_list_view(request):
     if request.is_authenticated():
         ctx = {'products': Product.objects.all(),
-               'categories_count': len(Category.objects.all())}
+               'categories_count': len(Category.objects.all()),
+               'cat_id': request.GET['cat_id']}
         return render('product_list.html', context=ctx)
     else:
         return HttpResponseForbidden()
@@ -41,5 +42,5 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(IndexView, self).get_context_data(**kwargs)
-        ctx['cat'] = Category.objects.get(pk=1)
+        ctx['cat'] = Category.objects.get(pk=self.request.GET.get('cat_id'))
         return ctx
