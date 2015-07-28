@@ -54,6 +54,7 @@ Implemented checks
 - W5501 (is-authenticated-not-called): Used when is_authenticated method is not called
 - W5502 (objects-get-without-doesnotexist): Used when Model.objects.get is used without enclosing it in try-except block to catch DoesNotExist exception.
 - W5503 (fetching-db-objects-len): Used when there is db query that fetches objects from database only to check the number of returned objects.
+- W5504 (raw-get-post-access): Used when request.GET or request.POST dicts is accessed directly, it is better to use forms.
 
 **Layout:**
 
@@ -63,3 +64,4 @@ Implemented checks
 **Misc:**
 
 - W5201 (print-used): Used when there is print statement or function
+
