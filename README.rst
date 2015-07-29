@@ -10,10 +10,14 @@ Only Python 2.7 supported for now.
 Installation
 ------------
 
+::
+
     pip install django_linter
 
 Usage
 -----
+
+::
 
     usage: django-linter [-h] TARGET [TARGET ...]
 

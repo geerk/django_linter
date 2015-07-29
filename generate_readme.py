@@ -25,11 +25,15 @@ Only Python 2.7 supported for now.
 Installation
 ------------
 
+::
+
     pip install django_linter
 
 Usage
 -----
 """, file=out)
+    print('::', file=out)
+    print('', file=out)
     usage = os.tmpfile()
     p = subprocess.Popen(
         ['python', '-m', 'django_linter.main', '-h'], stdout=usage)
