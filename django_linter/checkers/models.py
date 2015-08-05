@@ -44,9 +44,7 @@ class ModelsChecker(BaseChecker):
     _has_unicode_method = False
     _is_get_absolute_url = False
     _is_reverse_used_in_get_absolute_url = False
-    _text_fields = {'django.db.models.fields.CharField',
-                    'django.db.models.fields.TextField',
-                    'django.db.models.fields.SlugField'}
+    _text_fields = {'CharField', 'TextField', 'SlugField'}
 
     @staticmethod
     def _is_money_field(field_name):
@@ -54,7 +52,7 @@ class ModelsChecker(BaseChecker):
 
     @classmethod
     def _is_text_field(cls, klass):
-        return any(klass.is_subtype_of(text_field)
+        return any(klass.is_subtype_of('django.db.models.fields.' + text_field)
                    for text_field in cls._text_fields)
 
     @classmethod
