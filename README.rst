@@ -1,6 +1,9 @@
 Django linter
 =============
 
+.. image:: https://travis-ci.org/geerk/django_linter.svg?branch=master
+    :target: https://travis-ci.org/geerk/django_linter
+
 This is a simple extension for pylint that aims to check some common mistakes in django projects.
 
 Contributions are welcome.
