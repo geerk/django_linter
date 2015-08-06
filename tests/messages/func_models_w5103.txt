@@ -1,0 +1,1 @@
+W: 11:Product: Possible use of naive datetime, consider using "auto_now"
