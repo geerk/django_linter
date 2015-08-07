@@ -1,1 +1,3 @@
-W:  8:product_create: is_authenticated is not called
+R: 14:ProductUpdateView: Too many ancestors (11/7)
+W:  9:product_create: is_authenticated is not called
+W: 19:ProductUpdateView.post: is_authenticated is not called
