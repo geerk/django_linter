@@ -42,20 +42,21 @@ class ViewsChecker(BaseChecker):
         return False
 
     @staticmethod
-    def _is_request(node):
-        if ((isinstance(node, Name) and node.name == 'request') or
-                (isinstance(node, Getattr) and node.attrname == 'request')):
+    def _is_getattr_or_name(node, name):
+        if ((isinstance(node, Name) and node.name == name) or
+                (isinstance(node, Getattr) and node.attrname == name)):
             return True
         return False
 
     def visit_getattr(self, node):
         parent = node.parent
         expr = node.expr
-        if self._is_request(expr):
+        if self._is_getattr_or_name(expr, 'user'):
             if (node.attrname == 'is_authenticated' and
                     not isinstance(parent, CallFunc)):
                 self.add_message('W5501', node=node)
-            elif node.attrname in ('GET', 'POST'):
+        elif self._is_getattr_or_name(expr, 'request'):
+            if node.attrname in ('GET', 'POST'):
                 if (isinstance(parent, Subscript) or
                         isinstance(parent, Getattr) and
                         parent.attrname == 'get'):
