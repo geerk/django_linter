@@ -49,7 +49,8 @@ class SettingsShecker(BaseChecker):
                 if setting_name not in module_locals:
                     self.add_message('E5001', args=setting_name, node=node)
                 else:
-                    val = safe_infer(module_locals[setting_name][-1])
+                    setting = module_locals[setting_name][-1]
+                    val = safe_infer(setting)
                     if val is not None and val is not YES:
                         if isinstance(val, List):
                             is_empty = not val.elts
@@ -57,4 +58,4 @@ class SettingsShecker(BaseChecker):
                             is_empty = not val.value
                         if is_empty:
                             self.add_message(
-                                'E5002', args=setting_name, node=node)
+                                'E5002', args=setting_name, node=setting)
