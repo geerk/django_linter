@@ -1,10 +1,9 @@
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
 import unittest
-import sys
-import re
 import os
 
-from pylint.testutils import (make_tests, LintTestUsingModule, LintTestUsingFile,
-    LintTestUpdate, cb_test_gen, linter, test_reporter)
+from pylint.testutils import make_tests, LintTestUsingFile, cb_test_gen, linter
 
 
 def suite():
@@ -12,9 +11,11 @@ def suite():
     msg_dir = os.path.join(os.path.dirname(__file__), 'messages')
     linter.load_plugin_modules(['django_linter'])
     linter.global_set_option('required-attributes', ())
+    linter.set_option('disable', 'R0901')
     return unittest.TestSuite([
         unittest.makeSuite(test, suiteClass=unittest.TestSuite)
-        for test in make_tests(input_dir, msg_dir, None, [cb_test_gen(LintTestUsingFile)])])
+        for test in make_tests(
+            input_dir, msg_dir, None, [cb_test_gen(LintTestUsingFile)])])
 
 
 def load_tests(loader, tests, pattern):
