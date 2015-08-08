@@ -20,8 +20,6 @@ This is a simple extension for pylint that aims to check some common mistakes in
 
 Contributions are welcome.
 
-Only Python 2.7 supported for now.
-
 Installation
 ------------
 

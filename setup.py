@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='django_linter',
-    version='0.3',
+    version='0.4',
     packages=('django_linter', 'django_linter.checkers'),
     description='Linter for django projects',
     long_description=open('README.rst').read(),
@@ -25,5 +25,9 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
         'Operating System :: OS Independent'))
