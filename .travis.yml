@@ -7,6 +7,10 @@ env:
   - DJANGO_VERSION=1.8.3
   - DJANGO_VERSION=1.7.9
   - DJANGO_VERSION=1.4.21
+matrix:
+    exclude:
+      - python: "3.4"
+        env: DJANGO_VERSION=1.4.21
 install:
   - pip install -q pylint Django==$DJANGO_VERSION
 script: python -m unittest discover -s tests
