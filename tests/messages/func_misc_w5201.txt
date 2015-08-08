@@ -1,0 +1,3 @@
+C:  5: Unnecessary parens after 'print' keyword
+W:  4: Print is used (consider using logger instead)
+W:  5: Print is used (consider using logger instead)
