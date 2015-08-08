@@ -32,7 +32,7 @@ class FormsChecker(BaseChecker):
 
     def visit_callfunc(self, node):
         if self._is_form_class:
-            ass_name = node.parent.get_children().next()
+            ass_name = next(node.parent.get_children())
             if isinstance(ass_name, AssName):
                 field_name = ass_name.name
                 val = safe_infer(node)

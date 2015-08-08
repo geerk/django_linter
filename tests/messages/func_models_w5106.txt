@@ -1,3 +1,2 @@
-E: 12:Category.__unicode__: Instance of 'Category' has no 'id' member
 W: 12:Category.__unicode__: Unicode method should always return unicode
 W: 21:Product.__unicode__: Unicode method should always return unicode

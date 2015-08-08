@@ -107,7 +107,7 @@ class ModelsChecker(BaseChecker):
             self._is_reverse_used_in_get_absolute_url = True
 
         if self._is_model_class:
-            ass_name = node.parent.get_children().next()
+            ass_name = next(node.parent.get_children())
             if isinstance(ass_name, AssName):
                 field_name = ass_name.name
                 val = safe_infer(node)

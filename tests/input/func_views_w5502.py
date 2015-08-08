@@ -28,7 +28,8 @@ def product_detail_view(request, slug):
             product = Product.objects.get(slug=slug)
         except MultipleObjectsReturned:
             return HttpResponseNotFound()
-        return render(request, 'product_detail.html', context={'product': product})
+        return render(
+            request, 'product_detail.html', context={'product': product})
     else:
         return HttpResponseForbidden()
 
@@ -39,7 +40,8 @@ def category_detail_view(request, **kwargs):
         category = Category.objects.get(pk=kwargs['pk'])
     except Category.DoesNotExist:
         return HttpResponseNotFound()
-    return render(request, 'category_detail.html', context={'category': category})
+    return render(
+        request, 'category_detail.html', context={'category': category})
 
 
 class IndexView(TemplateView):

@@ -1,2 +1,1 @@
-F:  5: Unable to import 'models'
 W: 12:product_list_view: Fetching model objects only for getting len
