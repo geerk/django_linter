@@ -5,27 +5,33 @@ from pylint.checkers import BaseChecker
 from pylint.interfaces import IAstroidChecker
 from astroid import Name, CallFunc, AssName, Getattr, Tuple, Subscript
 
+from ..__pkginfo__ import BASE_ID
+
 
 class ViewsChecker(BaseChecker):
     __implements__ = IAstroidChecker
 
     name = 'views'
     msgs = {
-        'W5501': ('is_authenticated is not called',
-                  'is-authenticated-not-called',
-                  'Used when is_authenticated method is not called'),
-        'W5502': ('objects.get is used without catching DoesNotExist',
-                  'objects-get-without-doesnotexist',
-                  'Used when Model.objects.get is used without enclosing it '
-                  'in try-except block to catch DoesNotExist exception.'),
-        'W5503': ('Fetching model objects only for getting len',
-                  'fetching-db-objects-len',
-                  'Used when there is db query that fetches objects from '
-                  'database only to check the number of returned objects.'),
-        'W5504': ('Accessing raw GET or POST data, consider using forms',
-                  'raw-get-post-access',
-                  'Used when request.GET or request.POST dicts is accessed '
-                  'directly, it is better to use forms.'),
+        'W%s31' % BASE_ID: (
+            'is_authenticated is not called',
+            'is-authenticated-not-called',
+            'Used when is_authenticated method is not called'),
+        'W%s32' % BASE_ID: (
+            'objects.get is used without catching DoesNotExist',
+            'objects-get-without-doesnotexist',
+            'Used when Model.objects.get is used without enclosing it '
+            'in try-except block to catch DoesNotExist exception.'),
+        'W%s33' % BASE_ID: (
+            'Fetching model objects only for getting len',
+            'fetching-db-objects-len',
+            'Used when there is db query that fetches objects from '
+            'database only to check the number of returned objects.'),
+        'W%s34' % BASE_ID: (
+            'Accessing raw GET or POST data, consider using forms',
+            'raw-get-post-access',
+            'Used when request.GET or request.POST dicts is accessed '
+            'directly, it is better to use forms.'),
     }
 
     _is_view_function = False
@@ -54,18 +60,19 @@ class ViewsChecker(BaseChecker):
         if self._is_getattr_or_name(expr, 'user'):
             if (node.attrname == 'is_authenticated' and
                     not isinstance(parent, CallFunc)):
-                self.add_message('W5501', node=node)
+                self.add_message('is-authenticated-not-called', node=node)
         elif self._is_getattr_or_name(expr, 'request'):
             if node.attrname in ('GET', 'POST'):
                 if (isinstance(parent, Subscript) or
                         isinstance(parent, Getattr) and
                         parent.attrname == 'get'):
-                    self.add_message('W5504', node=node)
+                    self.add_message('raw-get-post-access', node=node)
         elif node.attrname == 'objects':
             if parent.attrname == 'get':
                 if self._is_view_function or self._is_view_class:
                     if not self._is_inside_try_except:
-                        self.add_message('W5502', node=node)
+                        self.add_message(
+                            'objects-get-without-doesnotexist', node=node)
                     else:
                         for h in self._try_except_node.handlers:
                             if self._is_does_not_exist(h.type):
@@ -79,10 +86,11 @@ class ViewsChecker(BaseChecker):
                                 if _does_not_exist_found:
                                     break
                         else:
-                            self.add_message('W5502', node=node)
+                            self.add_message(
+                                'objects-get-without-doesnotexist', node=node)
             elif parent.attrname in ('all', 'filter', 'exclude'):
                 if self._is_len:
-                    self.add_message('W5503', node=node)
+                    self.add_message('fetching-db-objects-len', node=node)
 
     def visit_function(self, node):
         if 'views' in node.root().file:

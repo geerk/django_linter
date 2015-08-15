@@ -5,7 +5,7 @@ from argparse import ArgumentParser
 
 from pylint import lint, reporters
 
-from . import checkers
+from . import register
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
     linter = lint.PyLinter()
     reporters.initialize(linter)
     linter._load_reporter()
-    checkers.register(linter)
+    register(linter)
 
     with lint.fix_import_path(args.targets):
         linter.check(args.targets)

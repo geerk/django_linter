@@ -6,16 +6,18 @@ from pylint.interfaces import IAstroidChecker
 from pylint.checkers.utils import safe_infer
 from astroid import YES, AssName
 
+from ..__pkginfo__ import BASE_ID
+
 
 class FormsChecker(BaseChecker):
     __implements__ = IAstroidChecker
 
     name = 'forms'
     msgs = {
-        'W5401': ('Form field redefinition: %s.%s',
-                  'form-field-redefinition',
-                  'Used when there are more than one form field with '
-                  'the same name.'),
+        'W%s11' % BASE_ID: (
+            'Form field redefinition: %s.%s',
+            'form-field-redefinition',
+            'Used when there are more than one form field with the same name.'),
     }
 
     _is_form_class = False
@@ -40,7 +42,7 @@ class FormsChecker(BaseChecker):
                     if val.is_subtype_of('django.forms.fields.Field'):
                         if field_name in self._form_field_names:
                             self.add_message(
-                                'W5401', node=node,
+                                'form-field-redefinition', node=node,
                                 args=(self._form_name, field_name))
                         else:
                             self._form_field_names.add(field_name)

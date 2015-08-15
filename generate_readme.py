@@ -16,6 +16,9 @@ def main():
     print("""Django linter
 =============
 
+.. image:: https://travis-ci.org/geerk/django_linter.svg?branch=master
+    :target: https://travis-ci.org/geerk/django_linter
+
 This is a simple extension for pylint that aims to check some common mistakes in django projects.
 
 Contributions are welcome.
@@ -29,6 +32,15 @@ Installation
 
 Usage
 -----
+
+It can be used as a plugin or standalone script. To use it as a plugin it should be installed first, then run with pylint:
+
+::
+
+    pylint --load-plugins=django_linter TARGET
+
+To use it as a standalone script:
+
 """, file=out)
     print('::', file=out)
     print('', file=out)
