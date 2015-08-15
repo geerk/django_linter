@@ -79,3 +79,10 @@ Implemented checks
 
 - W5251 (print-used): Used when there is print statement or function
 
+Implemented suppressers
+-----------------------
+
+- "Meta" classes
+- urlpatterns
+- logger
+

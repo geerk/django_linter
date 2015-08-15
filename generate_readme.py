@@ -66,6 +66,13 @@ To use it as a standalone script:
             print('- %s (%s): %s' % (k, checker.msgs[k][1], checker.msgs[k][2]),
                   file=out)
         print('', file=out)
+    print("""Implemented suppressers
+-----------------------
+
+- "Meta" classes
+- urlpatterns
+- logger
+""", file=out)
 
 
 if __name__ == '__main__':
