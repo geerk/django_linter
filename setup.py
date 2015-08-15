@@ -4,18 +4,19 @@ from setuptools import setup
 
 setup(
     name='django_linter',
-    version='0.4',
-    packages=('django_linter', 'django_linter.checkers'),
+    version='0.5.dev1',
+    packages=('django_linter', 'django_linter.checkers',
+              'django_linter.suppressers'),
     description='Linter for django projects',
     long_description=open('README.rst').read(),
     author='Timofey Trukhanov',
     author_email='timofey.trukhanov@gmail.com',
     license='MIT',
     url='https://github.com/geerk/django_linter',
-    install_requires=('pylint',),
+    install_requires=('pylint>=1.4',),
     entry_points={
         'console_scripts': ['django-linter = django_linter.main:main']},
-    classifiers = (
+    classifiers=(
         'Development Status :: 4 - Beta',
         'Classifier: Framework :: Django :: 1.4',
         'Classifier: Framework :: Django :: 1.5',

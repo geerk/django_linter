@@ -1,0 +1,1 @@
+C: 10: Invalid constant name "foobar"

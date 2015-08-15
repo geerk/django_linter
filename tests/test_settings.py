@@ -1,27 +1,18 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
-
-from unittest import TestCase
 import sys
+from unittest import TestCase
 from os.path import abspath, dirname, join
 
-from pylint.testutils import TestReporter
-from pylint.lint import PyLinter
-from pylint import checkers
-
-test_reporter = TestReporter()
-linter = PyLinter()
-linter.set_reporter(test_reporter)
-linter.load_plugin_modules(['django_linter'])
-linter.disable('I')
-linter.config.persistent = 0
-checkers.initialize(linter)
-
-DATA = join(dirname(abspath(__file__)), 'settings')
-sys.path.insert(1, DATA)
+from pylint.testutils import linter
 
 
 class SettingsTestCase(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        DATA = join(dirname(abspath(__file__)), 'settings')
+        sys.path.insert(1, DATA)
 
     def setUp(self):
         linter.reporter.finalize()
