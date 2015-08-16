@@ -28,7 +28,7 @@ def transform_model_class(cls):
             else:
                 if isinstance(Manager.body[0], Pass):
                     # for django >= 1.7
-                    for func_name, func_list in QuerySet.locals.viewitems():
+                    for func_name, func_list in QuerySet.locals.items():
                         if (not func_name.startswith('_') and
                                 func_name not in Manager.locals):
                             func = func_list[0]
