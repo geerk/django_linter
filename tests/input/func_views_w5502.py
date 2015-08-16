@@ -12,7 +12,6 @@ from .models import Product, Category
 
 
 def product_list_view(request, cat_id):
-    """product_list_view"""
     if request.is_authenticated():
         ctx = {'products': Product.objects.all(),
                'cat_id': cat_id}
@@ -22,7 +21,6 @@ def product_list_view(request, cat_id):
 
 
 def product_detail_view(request, slug):
-    """product_detail_view"""
     if request.is_authenticated:
         try:
             product = Product.objects.get(slug=slug)
@@ -35,7 +33,6 @@ def product_detail_view(request, slug):
 
 
 def category_detail_view(request, **kwargs):
-    """category_detail_view"""
     try:
         category = Category.objects.get(pk=kwargs['pk'])
     except Category.DoesNotExist:
@@ -45,7 +42,6 @@ def category_detail_view(request, **kwargs):
 
 
 class IndexView(TemplateView):
-    """IndexView"""
 
     def get_context_data(self, **kwargs):
         ctx = super(IndexView, self).get_context_data(**kwargs)

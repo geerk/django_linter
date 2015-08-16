@@ -1,2 +1,2 @@
-W: 12:Category.__unicode__: Unicode method should always return unicode
-W: 21:Product.__unicode__: Unicode method should always return unicode
+W: 11:Category.__unicode__: Unicode method should always return unicode
+W: 19:Product.__unicode__: Unicode method should always return unicode

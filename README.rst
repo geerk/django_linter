@@ -86,3 +86,13 @@ Implemented suppressers
 - urlpatterns
 - logger
 
+Implemented transformers
+------------------------
+
+**Models**
+
+- "id" field
+- "objects" manager
+- "DoesNotExist" exception
+- "MultipleObjectsReturned" exception
+

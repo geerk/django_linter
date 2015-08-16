@@ -1,1 +1,1 @@
-W: 10:Product: Money related field is float: price
+W:  9:Product: Money related field is float: price

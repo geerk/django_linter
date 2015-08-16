@@ -1,1 +1,1 @@
-W: 12:product_list_view: Fetching model objects only for getting len
+W: 11:product_list_view: Fetching model objects only for getting len

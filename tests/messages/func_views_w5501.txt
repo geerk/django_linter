@@ -1,2 +1,2 @@
-W:  9:product_create: is_authenticated is not called
-W: 19:ProductUpdateView.post: is_authenticated is not called
+W:  8:product_create: is_authenticated is not called
+W: 16:ProductUpdateView.post: is_authenticated is not called

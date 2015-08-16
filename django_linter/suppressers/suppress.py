@@ -9,7 +9,10 @@ def suppress_msgs(checker, method_name, test_func, *msg_ids):
     def patched_add_message(self, msg_id, line=None, node=None, args=None,
                             confidence=UNDEFINED):
         if not (test_func(node) and msg_id in msg_ids):
-            checker.linter.add_message(msg_id, line, node, args, confidence)
+            try:
+                checker.linter.add_message(msg_id, line, node, args, confidence)
+            except AttributeError:  # when checker is turned off
+                pass
 
     old_method = getattr(checker, method_name)
 

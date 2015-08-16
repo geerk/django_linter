@@ -1,2 +1,2 @@
-W: 28:product_detail_view: objects.get is used without catching DoesNotExist
-W: 52:IndexView.get_context_data: objects.get is used without catching DoesNotExist
+W: 26:product_detail_view: objects.get is used without catching DoesNotExist
+W: 48:IndexView.get_context_data: objects.get is used without catching DoesNotExist

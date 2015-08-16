@@ -15,7 +15,7 @@ def register(linter):
             # default
             'i', 'j', 'k', 'ex', 'Run', '_',
             # django specific
-            'urlpatterns',
+            'urlpatterns', 'qs', 'id',
             # misc
             'logger',
         ]))

@@ -5,7 +5,6 @@ from django.db import models
 
 
 class Category(models.Model):
-    """Category"""
     name = models.CharField()
 
     def __unicode__(self):
@@ -13,7 +12,6 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    """Product"""
     name = models.CharField(max_length=255)
     category_id = models.ForeignKey(Category)
 

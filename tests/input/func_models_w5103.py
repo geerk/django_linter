@@ -6,7 +6,6 @@ from django.db import models
 
 
 class Product(models.Model):
-    """Product"""
     name = models.CharField(max_length=255)
     modified = models.DateTimeField(default=datetime.now)
 

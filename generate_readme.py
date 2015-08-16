@@ -72,6 +72,16 @@ To use it as a standalone script:
 - "Meta" classes
 - urlpatterns
 - logger
+
+Implemented transformers
+------------------------
+
+**Models**
+
+- "id" field
+- "objects" manager
+- "DoesNotExist" exception
+- "MultipleObjectsReturned" exception
 """, file=out)
 
 

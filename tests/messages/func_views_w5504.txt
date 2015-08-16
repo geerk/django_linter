@@ -1,2 +1,2 @@
-W: 13:product_list_view: Accessing raw GET or POST data, consider using forms
-W: 25:IndexView.get_context_data: Accessing raw GET or POST data, consider using forms
+W: 12:product_list_view: Accessing raw GET or POST data, consider using forms
+W: 23:IndexView.get_context_data: Accessing raw GET or POST data, consider using forms

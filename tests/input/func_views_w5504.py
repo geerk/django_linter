@@ -7,7 +7,6 @@ from .models import Product, Category
 
 
 def product_list_view(request):
-    """product_list_view"""
     if request.is_authenticated():
         ctx = {'products': Product.objects.all(),
                'cat_id': request.GET['cat_id']}
@@ -17,12 +16,11 @@ def product_list_view(request):
 
 
 class IndexView(TemplateView):
-    """IndexView"""
 
     def get_context_data(self, **kwargs):
         ctx = super(IndexView, self).get_context_data(**kwargs)
         try:
             ctx['cat'] = Category.objects.get(pk=self.request.GET.get('cat_id'))
-        except Category.DoesNotExists:
+        except Category.DoesNotExist:
             ctx['cat'] = None
         return ctx
