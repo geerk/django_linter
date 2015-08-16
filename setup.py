@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='django_linter',
     version='0.5',
-    packages=('django_linter', 'django_linter.checkers',
-              'django_linter.suppressers', 'django_linter.transformers'),
+    packages=find_packages(exclude=['tests*']),
     description='Linter for django projects',
     long_description=open('README.rst').read(),
     author='Timofey Trukhanov',
