@@ -82,6 +82,10 @@ Implemented transformers
 - "objects" manager
 - "DoesNotExist" exception
 - "MultipleObjectsReturned" exception
+
+**Testing**
+
+- test responses (django and DRF)
 """, file=out)
 
 

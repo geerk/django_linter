@@ -96,3 +96,7 @@ Implemented transformers
 - "DoesNotExist" exception
 - "MultipleObjectsReturned" exception
 
+**Testing**
+
+- test responses (django and DRF)
+
