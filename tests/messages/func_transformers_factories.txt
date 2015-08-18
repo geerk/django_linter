@@ -1,0 +1,2 @@
+E: 30:ProductFactoryTestCase.test_product_factory: Instance of 'Product' has no 'foobar' member
+E: 44:CategoryFactoryTestCase.test_category_factory: Instance of 'Model' has no 'foobar' member

@@ -100,3 +100,7 @@ Implemented transformers
 
 - test responses (django and DRF)
 
+**Factories**
+
+- factory-boy's factories  (factory should return django model, but not always possible to infer model class)
+
