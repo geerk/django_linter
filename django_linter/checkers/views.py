@@ -67,7 +67,7 @@ class ViewsChecker(BaseChecker):
                         isinstance(parent, Getattr) and
                         parent.attrname == 'get'):
                     self.add_message('raw-get-post-access', node=node)
-        elif node.attrname == 'objects':
+        elif isinstance(parent, Getattr) and node.attrname == 'objects':
             if parent.attrname == 'get':
                 if self._is_view_function or self._is_view_class:
                     if not self._is_inside_try_except:

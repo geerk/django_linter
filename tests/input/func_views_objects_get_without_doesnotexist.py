@@ -46,4 +46,6 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super(IndexView, self).get_context_data(**kwargs)
         ctx['cat'] = Category.objects.get(pk=kwargs['cat_id'])
+        # check this not raises exception
+        self._manager = Category.objects  # pylint: disable=W0201
         return ctx
