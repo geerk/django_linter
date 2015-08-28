@@ -127,7 +127,7 @@ class ModelsChecker(BaseChecker):
                     if val.is_subtype_of('django.db.models.fields.Field'):
                         if field_name in self._model_field_names:
                             self.add_message(
-                                'model-field-redefinition', node=node,
+                                'model-field-redefinition', node=ass_name,
                                 args=(self._model_name, field_name))
                         else:
                             self._model_field_names.add(field_name)
@@ -149,9 +149,10 @@ class ModelsChecker(BaseChecker):
                         elif val.is_subtype_of(
                                 'django.db.models.fields.related.RelatedField'):
                             if field_name.endswith('_id'):
-                                self.add_message(
-                                    'related-field-named-with-id', node=node)
+                                self.add_message('related-field-named-with-id',
+                                                 node=ass_name)
                         if self._is_money_field(field_name) and (
                                 val.name == 'FloatField'):
                             self.add_message(
-                                'float-money-field', args=field_name, node=node)
+                                'float-money-field', args=field_name,
+                                node=ass_name)

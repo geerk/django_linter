@@ -42,7 +42,7 @@ class FormsChecker(BaseChecker):
                     if val.is_subtype_of('django.forms.fields.Field'):
                         if field_name in self._form_field_names:
                             self.add_message(
-                                'form-field-redefinition', node=node,
+                                'form-field-redefinition', node=ass_name,
                                 args=(self._form_name, field_name))
                         else:
                             self._form_field_names.add(field_name)
