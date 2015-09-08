@@ -15,13 +15,13 @@ setup(
     install_requires=('pylint>=1.4',),
     entry_points={
         'console_scripts': ['django-linter = django_linter.main:main']},
-    classifiers=(
+    classifiers=[
         'Development Status :: 4 - Beta',
-        'Classifier: Framework :: Django :: 1.4',
-        'Classifier: Framework :: Django :: 1.5',
-        'Classifier: Framework :: Django :: 1.6',
-        'Classifier: Framework :: Django :: 1.7',
-        'Classifier: Framework :: Django :: 1.8',
+        'Framework :: Django :: 1.4',
+        'Framework :: Django :: 1.5',
+        'Framework :: Django :: 1.6',
+        'Framework :: Django :: 1.7',
+        'Framework :: Django :: 1.8',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: Implementation :: CPython',
@@ -30,4 +30,4 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
-        'Operating System :: OS Independent'))
+        'Operating System :: OS Independent'])
