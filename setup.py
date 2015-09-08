@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django_linter',
-    version='0.6.dev3',
+    version='0.6',
     packages=find_packages(exclude=['tests*']),
     description='Linter for django projects',
     long_description=open('README.rst').read(),
