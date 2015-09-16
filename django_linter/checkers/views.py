@@ -38,7 +38,7 @@ class ViewsChecker(BaseChecker):
     _is_view_class = False
     _is_inside_try_except = False
     _try_except_node = None
-    _is_len = True
+    _is_len = False
 
     @staticmethod
     def _is_does_not_exist(node):
