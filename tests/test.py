@@ -10,7 +10,6 @@ def suite():
     input_dir = os.path.join(os.path.dirname(__file__), 'input')
     msg_dir = os.path.join(os.path.dirname(__file__), 'messages')
     linter.load_plugin_modules(['django_linter'])
-    linter.global_set_option('required-attributes', ())
     linter.set_option('disable', 'R0901,C0111')
     return unittest.TestSuite([
         unittest.makeSuite(test, suiteClass=unittest.TestSuite)

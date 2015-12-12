@@ -54,7 +54,7 @@ class ViewsChecker(BaseChecker):
             return True
         return False
 
-    def visit_getattr(self, node):
+    def visit_attribute(self, node):
         parent = node.parent
         expr = node.expr
         if self._is_getattr_or_name(expr, 'user'):
@@ -92,14 +92,14 @@ class ViewsChecker(BaseChecker):
                 if self._is_len:
                     self.add_message('fetching-db-objects-len', node=node)
 
-    def visit_function(self, node):
+    def visit_functiondef(self, node):
         if 'views' in node.root().file:
             args = node.args.args
             if (args and isinstance(args[0], AssName) and
                     args[0].name == 'request'):
                 self._is_view_function = True
 
-    def leave_function(self, node):
+    def leave_functiondef(self, node):
         self._is_view_function = False
 
     def visit_tryexcept(self, node):
@@ -110,16 +110,16 @@ class ViewsChecker(BaseChecker):
         self._is_inside_try_except = False
         self._try_except_node = None
 
-    def visit_callfunc(self, node):
+    def visit_call(self, node):
         if isinstance(node.func, Name) and node.func.name == 'len':
             self._is_len = True
 
-    def leave_callfunc(self, node):
+    def leave_call(self, node):
         self._is_len = False
 
-    def visit_class(self, node):
+    def visit_classdef(self, node):
         if node.is_subtype_of('django.views.generic.base.View'):
             self._is_view_class = True
 
-    def leave_class(self, node):
+    def leave_classdef(self, node):
         self._is_view_class = False

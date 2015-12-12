@@ -70,21 +70,21 @@ class ModelsChecker(BaseChecker):
         return (klass.is_subtype_of('__builtin__.unicode')
                 or cls._is_text_field(klass))
 
-    def visit_class(self, node):
+    def visit_classdef(self, node):
         self._is_model_class = bool(
             node.is_subtype_of('django.db.models.base.Model'))
         if self._is_model_class:
             self._model_field_names = set()
             self._model_name = node.name
 
-    def leave_class(self, node):
+    def leave_classdef(self, node):
         if self._is_model_class and not self._has_unicode_method:
             self.add_message('unicode-method-absent', args=node.name, node=node)
 
         self._is_model_class = False
         self._has_unicode_method = False
 
-    def visit_function(self, node):
+    def visit_functiondef(self, node):
         if self._is_model_class:
             if node.name == '__unicode__':
                 self._has_unicode_method = True
@@ -105,7 +105,7 @@ class ModelsChecker(BaseChecker):
             elif node.name == 'get_absolute_url':
                 self._is_get_absolute_url = True
 
-    def leave_function(self, node):
+    def leave_functiondef(self, node):
         if (self._is_get_absolute_url and
                 not self._is_reverse_used_in_get_absolute_url):
             self.add_message('get-absolute-url-without-reverse',
@@ -113,7 +113,7 @@ class ModelsChecker(BaseChecker):
         self._is_reverse_used_in_get_absolute_url = False
         self._is_get_absolute_url = False
 
-    def visit_callfunc(self, node):
+    def visit_call(self, node):
         if (self._is_get_absolute_url and isinstance(node.func, Name) and
                 node.func.name == 'reverse'):
             self._is_reverse_used_in_get_absolute_url = True
@@ -133,16 +133,14 @@ class ModelsChecker(BaseChecker):
                             self._model_field_names.add(field_name)
 
                         if val.name in self._text_fields:
-                            for arg in node.args:
-                                if (isinstance(arg, Keyword) and
-                                        arg.arg == 'null' and arg.value.value):
+                            for arg in node.keywords or []:
+                                if (arg.arg == 'null' and arg.value.value):
                                     self.add_message(
                                         'nullable-text-field', args=field_name,
                                         node=arg.value)
                         elif val.name == 'DateTimeField':
-                            for arg in node.args:
-                                if (isinstance(arg, Keyword) and
-                                    arg.arg == 'default' and
+                            for arg in node.keywords or []:
+                                if (arg.arg == 'default' and
                                         'datetime.now' in arg.value.as_string()):
                                     self.add_message(
                                         'naive-datetime-used', node=arg.value)

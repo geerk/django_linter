@@ -20,10 +20,10 @@ def register(linter):
             'logger',
         ]))
 
-    suppress_msgs(DocStringChecker, 'visit_class', is_meta_class,
+    suppress_msgs(DocStringChecker, 'visit_classdef', is_meta_class,
                   'missing-docstring')
-    suppress_msgs(MisdesignChecker, 'leave_class', is_meta_class,
+    suppress_msgs(MisdesignChecker, 'leave_classdef', is_meta_class,
                   'too-few-public-methods')
-    suppress_msgs(NewStyleConflictChecker, 'visit_class', is_meta_class,
+    suppress_msgs(NewStyleConflictChecker, 'visit_classdef', is_meta_class,
                   'old-style-class')
-    suppress_msgs(ClassChecker, 'visit_class', is_meta_class, 'no-init')
+    suppress_msgs(ClassChecker, 'visit_classdef', is_meta_class, 'no-init')

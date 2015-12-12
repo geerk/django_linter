@@ -22,14 +22,14 @@ class FormsChecker(BaseChecker):
 
     _is_form_class = False
 
-    def visit_class(self, node):
+    def visit_classdef(self, node):
         self._is_form_class = bool(
             node.is_subtype_of('django.forms.forms.BaseForm'))
         if self._is_form_class:
             self._form_field_names = set()
             self._form_name = node.name
 
-    def leave_class(self, node):
+    def leave_classdef(self, node):
         self._is_form_class = False
 
     def visit_callfunc(self, node):

@@ -1,6 +1,7 @@
-F:  6: Unable to import 'test_project.settings'
-F:  7: Unable to import 'test_project'
+E:  6: Unable to import 'test_project.settings'
+E:  7: Unable to import 'test_project'
 W:  5: Unused settings imported from django.conf
 W:  6: Improper settings import
 W:  6: Unused import test_project.settings
 W:  7: Improper settings import
+W:  7: Reimport 'settings' (imported line 6)

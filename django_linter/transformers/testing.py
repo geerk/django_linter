@@ -23,10 +23,13 @@ DJANGO_CLIENT_REQUEST = AstroidBuilder(
     MANAGER).string_build(DJANGO_REQUEST_DEFINITION).locals['request']
 DRF_CLIENT_REQUEST = AstroidBuilder(
     MANAGER).string_build(DRF_REQUEST_DEFINITION).locals['request']
+HTTP_METHODS = ('get', 'post', 'put', 'head', 'delete', 'options')
 
 
 def transform_test_response(cls):
     if cls.is_subtype_of('django.test.client.Client'):
-        cls.locals['request'] = DJANGO_CLIENT_REQUEST
+        for method in HTTP_METHODS:
+            cls.locals[method] = DJANGO_CLIENT_REQUEST
     elif cls.is_subtype_of('rest_framework.test.APIClient'):
-        cls.locals['request'] = DRF_CLIENT_REQUEST
+        for method in HTTP_METHODS:
+            cls.locals[method] = DRF_CLIENT_REQUEST
