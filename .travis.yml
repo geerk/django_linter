@@ -2,7 +2,6 @@ language: python
 python:
   - "2.7"
   - "3.5"
-  - pypy
 env:
   - DJANGO_VERSION=1.9
   - DJANGO_VERSION=1.8.7
